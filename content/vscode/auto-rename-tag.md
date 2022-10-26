@@ -1,7 +1,3 @@
----
-title: "Callouts"
----
-
 # Auto Rename Tag
 
 > 这条笔记创建于: 2022 年 10 月 24 日，星期一，20: 39。

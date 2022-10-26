@@ -1,0 +1,22 @@
+{
+  "files.autoSave": "onFocusChange",
+  "editor.minimap.enabled": false,
+  "editor.wrappingIndent": "indent",
+  "editor.overviewRulerBorder": false,
+  // "off": 不会在文章底部生成反向链接，线上会自动生成，可设置为 off，本地使用时可设置为 withExtensions
+  "foam.edit.linkReferenceDefinitions": "withExtensions",
+  "foam.openDailyNote.directory": "./content/journal", // Daily Note 的目录
+  "foam.openDailyNote.onStartup": true, // 启动项目时自动打开 Daily Note
+  "[markdown]": {
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": false
+    }
+  },
+  "files.exclude": {
+    "_site/**": true
+  },
+  "git.enableSmartCommit": true,
+  "git.postCommitCommand": "sync"
+}

@@ -1,23 +1,21 @@
 ---
-title: "测试中文标题"
+title: "VSCode 因为插件丰富、功能强大被大家喜欢，真是令人烦恼啊"
+tags:
+- VSCode
 ---
-
-# VSCode 因为插件丰富、功能强大被大家喜欢，真是令人烦恼啊
-
-> 这条笔记更新于: 2022 年 10 月 24 日，星期一，23: 03。
 
 ## 🎨 主题
 
-我最常用的 VS Code 主题是 [Vitesse](https://marketplace.visualstudio.com/items?itemName=antfu.theme-vitesse)，目前正在使用。
+我最常用的 VSCode 主题是 [Vitesse](https://marketplace.visualstudio.com/items?itemName=antfu.theme-vitesse)，目前正在使用。
 
 ![20221024174334](https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/ts/20221024174334.png)
 
 ⭐ 我之前使用过的其他一些主题：
 
-- [GitHub Theme](https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme) - 我使用了 Github Light Default
-- [Aofuji Light Theme](https://marketplace.visualstudio.com/items?itemName=dsrkafuu.vscode-theme-aofuji) - 我使用了 Oranji (No Italic)
+- [GitHub Theme](https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme) 👉 我使用 Github Light Default
+- [Aofuji Light Theme](https://marketplace.visualstudio.com/items?itemName=dsrkafuu.vscode-theme-aofuji) 👉 我使用 Oranji (No Italic)
 
-> 自定义主题配色：[[custom-vscode-theme-color-schemes]]
+> 拓展：[atoms/VSCode 自定义主题配色]
 
 ## ✒ 字体
 
@@ -34,37 +32,37 @@ title: "测试中文标题"
 
 ![20221024180447](https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/ts/20221024180447.png)
 
-## 💻 我使用的扩展
+## 💻 扩展
 
-| 扩展                                                                                                                                                             | 功能                             | 备注                              |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | --------------------------------- |
-| [bracket-pair-colorizer-2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)                                               | 彩虹🌈括号                        | [[bracket-pair-colorizer-config]] |
-| [Todo Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)                                                                           | 注释标签                         | [[todo-tree-config]]              |
-| [code-runner](https://marketplace.visualstudio.com/items?itemName=formulahendry.code-runner)                                                                     | 快速运行代码                     |                                   |
-| [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)                                                  | 拼写检查                         |                                   |
-| [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)                                                                             | 测试接口                         | [[vscode-rest-client]]            |
-| [JSON5 syntax](https://marketplace.visualstudio.com/items?itemName=mrmlnc.vscode-json5)                                                                          | 支持注释的 JSON                  |                                   |
-| [Image preview](https://marketplace.visualstudio.com/items?itemName=kisstkondoros.vscode-gutter-preview)                                                         | 图片预览                         |                                   |
-| [PicGo](https://marketplace.visualstudio.com/items?itemName=Spades.vs-picgo)                                                                                     | 图床工具                         | [[picgo-settings]]                |
-| [Trailing Spaces](https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces)                                                                | 多余空格                         |                                   |
-| [git-commit-plugin](https://marketplace.visualstudio.com/items?itemName=redjue.git-commit-plugin)                                                                | 自动生成 git 提交                |                                   |
-| [JSON to TS](https://marketplace.visualstudio.com/items?itemName=MariusAlchimavicius.json-to-ts)                                                                 | 将 json 对象转换为 ts 接口       |                                   |
-| [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)                                                                           | 更好的错误提示                   |                                   |
-| [Auto Rename Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag)                                                             | 自动重命名配对的 `HTML/XML` 标签 | [[notes/auto-rename-tag]]         |
-| [Foam](https://marketplace.visualstudio.com/items?itemName=foam.foam-vscode)                                                                                     | 双链笔记                         | [[foam-guide]]                    |
-| [CodeMetrics](https://marketplace.visualstudio.com/items?itemName=kisstkondoros.vscode-codemetrics)                                                              | 分析代码复杂度                   |                                   |
-| [JavaScript and TypeScript Nightly](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-next)                                        | ts 最新版本支持                  |                                   |
-| [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)                                                             | 图标主题                         |                                   |
-| [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)                                                                     | 彩虹缩进                         |                                   |
-| [dein Snippets Pack](https://marketplace.visualstudio.com/items?itemName=deinsoftware.dein-snippets-pack)                                                        | js 和 ts 代码片段                |                                   |
-| [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)                                                            | markdown 书写                    |                                   |
-| [Markdown Preview Github Styling](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-preview-github-styles)                                    | Github 风格 Markdown 预览        |                                   |
-| [markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)                                                               | markdown 格式检查                |                                   |
-| [GitHub Copilot Nightly](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-nightly)                                                             | 明明你是 pilot，我才是 copilot   |                                   |
-| [ES7+ React/Redux/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)                                    | react 代码片段                   |                                   |
-| [Import Cost](https://marketplace.visualstudio.com/items?itemName=wix.vscode-import-cost)                                                                        | 包大小计算                       |                                   |
-| [live server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)                                                                         | 本地服务器                       |                                   |
-| [Mintlify Doc Writer for Python, JavaScript, TypeScript, C++, PHP, Java, C#, Ruby & more](https://marketplace.visualstudio.com/items?itemName=mintlify.document) | AI 注释                          |                                   |
+| 扩展                                                                                                                                                             | 功能                             | 备注                                            |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------- |
+| [bracket-pair-colorizer-2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)                                               | 彩虹🌈括号                        | [[atoms/VSCode 原生高性能括号着色无缝迁移方案]] |
+| [Todo Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)                                                                           | 注释标签                         | [[atoms/Todo Tree 扩展设置]]                    |
+| [code-runner](https://marketplace.visualstudio.com/items?itemName=formulahendry.code-runner)                                                                     | 快速运行代码                     |                                                 |
+| [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker)                                                  | 拼写检查                         |                                                 |
+| [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)                                                                             | 测试接口                         | [[atoms/VSCode REST Client 插件测试接口]]       |
+| [JSON5 syntax](https://marketplace.visualstudio.com/items?itemName=mrmlnc.vscode-json5)                                                                          | 支持注释的 JSON                  |                                                 |
+| [Image preview](https://marketplace.visualstudio.com/items?itemName=kisstkondoros.vscode-gutter-preview)                                                         | 图片预览                         |                                                 |
+| [PicGo](https://marketplace.visualstudio.com/items?itemName=Spades.vs-picgo)                                                                                     | 图床工具                         | [[picgo-settings]]                              |
+| [Trailing Spaces](https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces)                                                                | 多余空格                         |                                                 |
+| [git-commit-plugin](https://marketplace.visualstudio.com/items?itemName=redjue.git-commit-plugin)                                                                | 自动生成 git 提交                |                                                 |
+| [JSON to TS](https://marketplace.visualstudio.com/items?itemName=MariusAlchimavicius.json-to-ts)                                                                 | 将 json 对象转换为 ts 接口       |                                                 |
+| [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)                                                                           | 更好的错误提示                   |                                                 |
+| [Auto Rename Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag)                                                             | 自动重命名配对的 `HTML/XML` 标签 | [[auto-rename-tag]]                             |
+| [Foam](https://marketplace.visualstudio.com/items?itemName=foam.foam-vscode)                                                                                     | 双链笔记                         | [[foam-guide]]                                  |
+| [CodeMetrics](https://marketplace.visualstudio.com/items?itemName=kisstkondoros.vscode-codemetrics)                                                              | 分析代码复杂度                   |                                                 |
+| [JavaScript and TypeScript Nightly](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-next)                                        | ts 最新版本支持                  |                                                 |
+| [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)                                                             | 图标主题                         |                                                 |
+| [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)                                                                     | 彩虹缩进                         |                                                 |
+| [dein Snippets Pack](https://marketplace.visualstudio.com/items?itemName=deinsoftware.dein-snippets-pack)                                                        | js 和 ts 代码片段                |                                                 |
+| [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)                                                            | markdown 书写                    |                                                 |
+| [Markdown Preview Github Styling](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-preview-github-styles)                                    | Github 风格 Markdown 预览        |                                                 |
+| [markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)                                                               | markdown 格式检查                |                                                 |
+| [GitHub Copilot Nightly](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-nightly)                                                             | 明明你是 pilot，我才是 copilot   |                                                 |
+| [ES7+ React/Redux/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)                                    | react 代码片段                   |                                                 |
+| [Import Cost](https://marketplace.visualstudio.com/items?itemName=wix.vscode-import-cost)                                                                        | 包大小计算                       |                                                 |
+| [live server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)                                                                         | 本地服务器                       |                                                 |
+| [Mintlify Doc Writer for Python, JavaScript, TypeScript, C++, PHP, Java, C#, Ruby & more](https://marketplace.visualstudio.com/items?itemName=mintlify.document) | AI 注释                          |                                                 |
 
 ## ✔ 使用技巧
 
@@ -204,3 +202,17 @@ title: "测试中文标题"
   "git.confirmSync": false
 }
 ```
+
+[//begin]: # "Autogenerated link references for markdown compatibility"
+[atoms/VSCode 原生高性能括号着色无缝迁移方案]: <../atoms/VSCode 原生高性能括号着色无缝迁移方案.md> "VSCode 原生高性能括号着色无缝迁移方案"
+[atoms/Todo Tree 扩展设置]: <../atoms/Todo Tree 扩展设置.md> "Todo Tree 扩展设置"
+[atoms/VSCode REST Client 插件测试接口]: <../atoms/VSCode REST Client 插件测试接口.md> "VSCode REST Client 插件测试接口"
+[picgo-settings]: ../others/picgo-settings.md "PicGo 图床设置"
+[auto-rename-tag]: ../vscode/auto-rename-tag.md "Auto Rename Tag"
+[foam-guide]: ../vscode/foam-guide.md "在 VSCode 中使用双链笔记"
+[useful-vscode-shortcuts]: ../vscode/useful-vscode-shortcuts.md "有用的 VSCode 快捷键"
+[vscode-built-in-plugin-emmet]: ../vscode/vscode-built-in-plugin-emmet.md "VSCode 内置插件 Emmet"
+[vscode-remote-ssh-config]: ../vscode/vscode-remote-ssh-config.md "VSCode Remote SSH 配置"
+[vscode-snippets]: ../vscode/vscode-snippets.md "VSCode 使用 Snippets 设置代码块"
+[configure-git-default-editor-to-be-vscode]: ../vscode/configure-git-default-editor-to-be-vscode.md "配置 Git 的默认编辑器为 VSCode"
+[//end]: # "Autogenerated link references"
