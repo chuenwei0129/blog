@@ -9,7 +9,13 @@ enableToc: false
 
 **怀揣着这种不确定感继续学习，不要有知识包袱，不要假装自己很聪明**。这个世界本身就是抽象又复杂的。这没什么大不了。
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=465262028&auto=1&height=66"></iframe>
+{{< music auto="https://music.163.com/#/song?id=38392240" >}}
+
+{{< youtube w7Ft2ymGmfc >}}
+
+{{< tweet user="SanDiegoZoo" id="1453110110599868418" >}}
+
+{{<bilibili BV1Yt411d7xn>}}
 
 ## 文具永远不嫌多的差生
 
