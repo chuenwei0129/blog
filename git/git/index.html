@@ -1,0 +1,418 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=description content="怕遗忘 Git 的我，把相关知识点都记录下来就对了 Git 配置 SSH  [ git-ssh]
+ Git 的工作区域    Workspace：工作区，就是平时进行开发改动的地方，是当前看到最新的内容，在开发的过程也就是对工作区的操作。
+ Git 可以把工作区中的文件处理、压缩成一个提交对象，也能将取得的提交对象解包成文件同步到工作区中。
+   Stage / Index：暂存区，当执行 git add 的命令后，工作区的文件就会被移入暂存区，暂存区标记了当前工作区中那些内容是被 Git 管理的，当完成某个需求或者功能后需要提交代码，第一步就是通过 git add 先提交到暂存区。"><title>🚀 My PKM</title><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" type=image/png href=https://chuenwei0129.github.io/blog//icon.png><link href=https://chuenwei0129.github.io/blog/styles.708c2658f93e3a9d323a1f9fded8f4b2.min.css rel=stylesheet><link href=https://chuenwei0129.github.io/blog/styles/_light_syntax.86a48a52faebeaaf42158b72922b1c90.min.css rel=stylesheet id=theme-link><script src=https://chuenwei0129.github.io/blog/js/darkmode.ac447e5cbbbf4b347ad4076632fde0bb.min.js></script>
+<script src=https://chuenwei0129.github.io/blog/js/util.9825137f5e7825e8553c68ce39ac9e44.min.js></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css integrity=sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs crossorigin=anonymous><script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js integrity=sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js integrity=sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR crossorigin=anonymous></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/copy-tex.min.js integrity=sha384-ww/583aHhxWkz5DEVn6OKtNiIaLi2iBRNZXfJRiY1Ai7tnJ9UXpEsyvOITVpTl4A crossorigin=anonymous></script>
+<script src=https://unpkg.com/@floating-ui/core@0.7.3></script>
+<script src=https://unpkg.com/@floating-ui/dom@0.5.4></script>
+<script src=https://chuenwei0129.github.io/blog/js/popover.9b72b70bd35617d0635e9d15463662b2.min.js></script>
+<script src=https://chuenwei0129.github.io/blog/js/code-title.b35124ad8db0ba37162b886afb711cbc.min.js></script>
+<script src=https://chuenwei0129.github.io/blog/js/clipboard.c20857734e53a3fb733b7443879efa61.min.js></script>
+<script src=https://chuenwei0129.github.io/blog/js/callouts.7723cac461d613d118ee8bb8216b9838.min.js></script>
+<script>const BASE_URL="https://chuenwei0129.github.io/blog/",fetchData=Promise.all([fetch("https://chuenwei0129.github.io/blog/indices/linkIndex.079b2a52d609240e758260452aeb6925.min.json").then(e=>e.json()).then(e=>({index:e.index,links:e.links})),fetch("https://chuenwei0129.github.io/blog/indices/contentIndex.af711b9bcfc3b913b716e20a69c5b6d4.min.json").then(e=>e.json())]).then(([{index:e,links:t},n])=>({index:e,links:t,content:n})),render=()=>{const e=new URL(BASE_URL),t=e.pathname,n=window.location.pathname,s=t==n;addCopyButtons(),addTitleToCodeBlocks(),addCollapsibleCallouts(),initPopover("https://chuenwei0129.github.io/blog",!0,!0);const o=document.getElementById("footer");if(o){const e=document.getElementById("graph-container");if(!e)return requestAnimationFrame(render);e.textContent="";const t=s&&!1;drawGraph("https://chuenwei0129.github.io/blog",t,[{"/moc":"#4388cc"}],t?{centerForce:1,depth:-1,enableDrag:!0,enableLegend:!1,enableZoom:!0,fontSize:.5,linkDistance:1,opacityScale:3,repelForce:1,scale:1.4}:{centerForce:1,depth:1,enableDrag:!0,enableLegend:!1,enableZoom:!0,fontSize:.6,linkDistance:1,opacityScale:3,repelForce:2,scale:1.2})}},init=(e=document)=>{addCopyButtons(),addTitleToCodeBlocks(),renderMathInElement(e.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}],macros:{'’':"'"},throwOnError:!1})}</script><script type=module>
+    import { attachSPARouting } from "https:\/\/chuenwei0129.github.io\/blog\/js\/router.9d4974281069e9ebb189f642ae1e3ca2.min.js"
+    attachSPARouting(init, render)
+  </script></head><script async src="https://www.googletagmanager.com/gtag/js?id=G-FF2GJ40CQT"></script>
+<script>var doNotTrack=!1;if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-FF2GJ40CQT",{anonymize_ip:!1})}</script><body><div id=search-container><div id=search-space><input autocomplete=off id=search-bar name=search type=text aria-label=Search placeholder="Search for something..."><div id=results-container></div></div></div><script src=https://cdn.jsdelivr.net/npm/flexsearch@0.7.21/dist/flexsearch.bundle.js integrity="sha256-i3A0NZGkhsKjVMzFxv3ksk0DZh3aXqu0l49Bbh0MdjE=" crossorigin=anonymous defer></script>
+<script defer src=https://chuenwei0129.github.io/blog/js/full-text-search.24827f874defbbc6d529926cbfcfb493.min.js></script><div class=singlePage><header><h1 id=page-title><a href=https://chuenwei0129.github.io/blog/>🚀 My PKM</a></h1><div class=spacer></div><div id=search-icon><p>Search</p><svg tabindex="0" aria-labelledby="title desc" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title id="title">Search Icon</title><desc id="desc">Icon to open search</desc><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"/><circle cx="8" cy="8" r="7"/></g></svg></div><div class=darkmode><input class=toggle id=darkmode-toggle type=checkbox tabindex=-1>
+<label id=toggle-label-light for=darkmode-toggle tabindex=-1><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="dayIcon" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35"><title>Light Mode</title><path d="M6 17.5C6 16.672 5.328 16 4.5 16h-3C.672 16 0 16.672.0 17.5S.672 19 1.5 19h3C5.328 19 6 18.328 6 17.5zM7.5 26c-.414.0-.789.168-1.061.439l-2 2C4.168 28.711 4 29.086 4 29.5 4 30.328 4.671 31 5.5 31c.414.0.789-.168 1.06-.44l2-2C8.832 28.289 9 27.914 9 27.5 9 26.672 8.329 26 7.5 26zm10-20C18.329 6 19 5.328 19 4.5v-3C19 .672 18.329.0 17.5.0S16 .672 16 1.5v3C16 5.328 16.671 6 17.5 6zm10 3c.414.0.789-.168 1.06-.439l2-2C30.832 6.289 31 5.914 31 5.5 31 4.672 30.329 4 29.5 4c-.414.0-.789.168-1.061.44l-2 2C26.168 6.711 26 7.086 26 7.5 26 8.328 26.671 9 27.5 9zM6.439 8.561C6.711 8.832 7.086 9 7.5 9 8.328 9 9 8.328 9 7.5c0-.414-.168-.789-.439-1.061l-2-2C6.289 4.168 5.914 4 5.5 4 4.672 4 4 4.672 4 5.5c0 .414.168.789.439 1.06l2 2.001zM33.5 16h-3c-.828.0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5h3c.828.0 1.5-.672 1.5-1.5S34.328 16 33.5 16zM28.561 26.439C28.289 26.168 27.914 26 27.5 26c-.828.0-1.5.672-1.5 1.5.0.414.168.789.439 1.06l2 2C28.711 30.832 29.086 31 29.5 31c.828.0 1.5-.672 1.5-1.5.0-.414-.168-.789-.439-1.061l-2-2zM17.5 29c-.829.0-1.5.672-1.5 1.5v3c0 .828.671 1.5 1.5 1.5s1.5-.672 1.5-1.5v-3C19 29.672 18.329 29 17.5 29zm0-22C11.71 7 7 11.71 7 17.5S11.71 28 17.5 28 28 23.29 28 17.5 23.29 7 17.5 7zm0 18c-4.136.0-7.5-3.364-7.5-7.5s3.364-7.5 7.5-7.5 7.5 3.364 7.5 7.5S21.636 25 17.5 25z"/></svg></label><label id=toggle-label-dark for=darkmode-toggle tabindex=-1><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="nightIcon" viewBox="0 0 100 100" style="enable-background='new 0 0 100 100'"><title>Dark Mode</title><path d="M96.76 66.458c-.853-.852-2.15-1.064-3.23-.534-6.063 2.991-12.858 4.571-19.655 4.571C62.022 70.495 50.88 65.88 42.5 57.5 29.043 44.043 25.658 23.536 34.076 6.47c.532-1.08.318-2.379-.534-3.23-.851-.852-2.15-1.064-3.23-.534-4.918 2.427-9.375 5.619-13.246 9.491-9.447 9.447-14.65 22.008-14.65 35.369.0 13.36 5.203 25.921 14.65 35.368s22.008 14.65 35.368 14.65c13.361.0 25.921-5.203 35.369-14.65 3.872-3.871 7.064-8.328 9.491-13.246C97.826 68.608 97.611 67.309 96.76 66.458z"/></svg></label></div></header><article><p class=meta>Last updated
+Oct 27, 2022
+<a href=https://github.com/chuenwei0129/blog/tree/hugo/content/git/git.md rel=noopener>Edit Source</a></p><ul class=tags></ul><aside class=mainTOC><details><summary>Table of Contents</summary><nav id=TableOfContents><ol><li><a href=#git-配置-ssh>Git 配置 SSH</a></li><li><a href=#git-的工作区域>Git 的工作区域</a></li><li><a href=#index-文件>Index 文件</a></li><li><a href=#提交历史目录><a href=#%E7%9B%AE%E5%BD%95>提交历史</a></a></li><li><a href=#工作流程目录><a href=#%E7%9B%AE%E5%BD%95>工作流程</a></a></li><li><a href=#git-基本操作目录><a href=#%E7%9B%AE%E5%BD%95>Git 基本操作</a></a><ol><li><a href=#配置命令>配置命令</a></li><li><a href=#把-git-的默认分支-master-修改成-main>把 Git 的默认分支 master 修改成 main</a></li><li><a href=#初始化仓库及操作>初始化仓库及操作</a></li><li><a href=#git-status>git status</a></li><li><a href=#修改提交信息>修改提交信息</a></li><li><a href=#撤销修改>撤销修改</a></li><li><a href=#git-pull>git pull</a></li><li><a href=#合并两个默认情况下没有共同基础的分支>合并两个默认情况下没有共同基础的分支</a></li><li><a href=#不建议在没有为偏离分支指定合并策略时执行-pull-操作>不建议在没有为偏离分支指定合并策略时执行 pull 操作</a></li><li><a href=#git-switch>git switch</a></li><li><a href=#git-reset>git reset</a></li><li><a href=#git-restore>git restore</a></li><li><a href=#git-stage>git stage</a></li><li><a href=#git-rebase>git rebase</a></li><li><a href=#git-cherry-pick>git cherry-pick</a></li><li><a href=#git-stash>git stash</a></li><li><a href=#配置-git-alias-提升工作效率>配置 git alias 提升工作效率</a></li></ol></li><li><a href=#参考资料>参考资料</a></li></ol></nav></details></aside><a href=#怕遗忘-git-的我把相关知识点都记录下来就对了><h1 id=怕遗忘-git-的我把相关知识点都记录下来就对了><span class=hanchor arialabel=Anchor># </span>怕遗忘 Git 的我，把相关知识点都记录下来就对了</h1></a><a href=#git-配置-ssh><h2 id=git-配置-ssh><span class=hanchor arialabel=Anchor># </span>Git 配置 SSH</h2></a><blockquote><p>[
+<a href=/blog/git/git-ssh/ rel=noopener class=internal-link data-src=/blog/git/git-ssh/>git-ssh</a>]</p></blockquote><a href=#git-的工作区域><h2 id=git-的工作区域><span class=hanchor arialabel=Anchor># </span>Git 的工作区域</h2></a><p><img src=https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/terminal/613861755_1618028580119_014AA794B8DE2B0593F9F6C4BE7243D9.png width=auto alt></p><ul><li><p><strong>Workspace</strong>：工作区，就是平时进行开发改动的地方，是当前看到最新的内容，在开发的过程也就是对工作区的操作。</p><blockquote><p>Git 可以把工作区中的文件处理、压缩成一个提交对象，也能将取得的提交对象解包成文件同步到工作区中。</p></blockquote></li><li><p><strong>Stage / Index</strong>：暂存区，当执行 <code>git add</code> 的命令后，工作区的文件就会被移入暂存区，暂存区标记了当前工作区中那些内容是被 Git 管理的，当完成某个需求或者功能后需要提交代码，第一步就是通过 <code>git add</code> 先提交到暂存区。</p><blockquote><p>Git 把它作为工作区与提交历史之间的中间区域，方便我们对提交内容进行组织：我们可能会在工作区同时更改多个完全不相干的文件，这时可以将它们分别放入暂存区，并在不同的提交中加入提交历史。此外暂存区还用于合并冲突时存放文件的不同版本。</p><p>除非是一个刚刚初始化的 Git 仓库，否则暂存区并不是空的，它会填充最近一次提交所对应的文件快照，因此当我们基于最近一次提交在工作区做了一些修改之后，git status 会将工作区的文件与暂存区的文件快照进行对比， 并提示我们有哪些做了修改的文件尚未加入暂存区。</p></blockquote></li><li><p><strong>Repository</strong>：本地仓库，位于自己的电脑上，通过 <code>git commit</code> 提交暂存区的内容，会进入本地仓库。</p></li><li><p><strong>Remote</strong>：远程仓库，用来托管代码的服务器，远程仓库的内容能够被分布在多个地点的处于协作关系的本地仓库修改，本地仓库修改完代码后通过 <code>git push</code> 命令同步代码到远程仓库。</p></li></ul><a href=#index-文件><h2 id=index-文件><span class=hanchor arialabel=Anchor># </span>Index 文件</h2></a><p>暂存区并不像工作区有可见的文件系统目录，或者像提交历史一样通过 <code>.git/objects</code> 目录保存着所有提交对象，它没有实际存在的目录或文件夹，它的实体是位于 .git 目录的 index 文件。 index 是一个二进制文件，包含着一个由路径名称、权限和 blob 对象的 SHA-1 值组成的有序列表。</p><p>我们可以通过 <code>git ls-files</code> 命令查看 index 中的内容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git ls-files --stage
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=m>100644</span> 67045665db202cf951f839a5f3e73efdcfd45021 <span class=m>0</span> .gitignore
+</span></span><span class=line><span class=cl><span class=m>100644</span> fdddb29aa445bf3d6a5d843d6dd77e10a9f99657 <span class=m>0</span> LICENSE
+</span></span><span class=line><span class=cl><span class=m>100644</span> da4a4b16b47061a625e8b977a1d7a490982ff75e <span class=m>0</span> README.md
+</span></span><span class=line><span class=cl><span class=m>100644</span> 984d0d5b2df5ecbb33a45fa601c6750b445a3385 <span class=m>0</span> index.js
+</span></span></code></pre></td></tr></table></div></div><p>index 中记录了暂存区文件的路径名称和 SHA-1 ID，文件内容已经作为 blob 对象保存到了 .git/objects 目录中：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>tree .git/objects -L <span class=m>2</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>.git/objects
+</span></span><span class=line><span class=cl>├── <span class=m>09</span>
+</span></span><span class=line><span class=cl>│   └── 8749da09bbdb571aa42c4f2c5162aaf3249161
+</span></span><span class=line><span class=cl>├── 0a
+</span></span><span class=line><span class=cl>│   └── 90005e3d4013c11f5c3b24124badec7da55fcf
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>......................
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>├── fd
+</span></span><span class=line><span class=cl>│   └── ddb29aa445bf3d6a5d843d6dd77e10a9f99657
+</span></span><span class=line><span class=cl>├── info
+</span></span><span class=line><span class=cl>└── pack
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=m>31</span> directories, <span class=m>32</span> files
+</span></span></code></pre></td></tr></table></div></div><p>blob 对象是 Git 用来保存文件数据的二进制对象，我们可以通过 ID 取得对应的 blob 对象，用 <code>git cat-file</code> 命令打印其内容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git cat-file -p 984d0d5b2df5ecbb33a45fa601c6750b445a3385
+</span></span></code></pre></td></tr></table></div></div><p>输出 index.js 内容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;Hello World&#39;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>当我们将一个修改过的文件加入暂存区后，如果又在工作区对文件进行了新的修改，需要重新将其加入暂存区，因为暂存区以 blob 对象保存的只是文件加入时的内容。</p><p><strong>在 index 文件中，还记录了每一个文件的创建时间和最后修改时间等元信息，它通过引用实际的数据对象包含了一份完整的文件快照，因此可以通过对比 SHA-1 校验和实现与工作区文件之间的快速比较。</strong></p><h2 id=提交历史目录><a rel=noopener class="internal-link broken" data-src=#%e7%9b%ae%e5%bd%95>提交历史</a></h2><p>提交历史是工作区文件在不同时间的文件快照（快照即文件或文件夹在特定时间点的状态，包括内容和元信息）。</p><p>我们可以通过 <code>git log</code> 命令查看当前分支的提交历史</p><p><img src=https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/terminal/SCR-20220402-pld.png width=auto alt></p><p>Git 通过「提交对象」来储存每一次提交。这个 ID 是以对象内容进行 SHA-1 计算得到的哈希值，不同的内容一定会得到不同的结果，<strong>Git 既把它作为每一个对象（不仅仅是提交对象）的唯一标识符，也用作 <code>.git/objects</code> 目录中的地址（其中存储着实际的二进制文件）</strong>，我们可以用 ID 找到对应的对象并打印其内容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git cat-file -p 50fd80a
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>tree 0a90005e3d4013c11f5c3b24124badec7da55fcf
+</span></span><span class=line><span class=cl>parent 8f23070fc78bf1b8a081c0b28beac3e7f3f9f019
+</span></span><span class=line><span class=cl>author chuenwei0129 &lt;chuenwei0129@gmail.com&gt; <span class=m>1648891715</span> +0800
+</span></span><span class=line><span class=cl>committer chuenwei0129 &lt;chuenwei0129@gmail.com&gt; <span class=m>1648891715</span> +0800
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>revert 第一次提交
+</span></span></code></pre></td></tr></table></div></div><p>这个提交对象的内容包含三部分：</p><ul><li>对应的 tree 对象的 ID</li><li>父提交对象的 ID</li><li>作者、提交者及提交信息等元信息</li></ul><p>tree 对象主要由其他 tree 对象和 blob 对象的 ID 以及路径名称组成：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git ls-tree 0a90005e3d4013c11f5c3b24124badec7da55fcf
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=m>100644</span> blob 67045665db202cf951f839a5f3e73efdcfd45021 .gitignore
+</span></span><span class=line><span class=cl><span class=m>100644</span> blob fdddb29aa445bf3d6a5d843d6dd77e10a9f99657 LICENSE
+</span></span><span class=line><span class=cl><span class=m>100644</span> blob da4a4b16b47061a625e8b977a1d7a490982ff75e README.md
+</span></span><span class=line><span class=cl><span class=m>100644</span> blob ccd0f2ff642e953d8ee04e98a62f8ad8167d05a8 index.js
+</span></span></code></pre></td></tr></table></div></div><p>就像目录递归地包含其他目录和文件一样，一个 tree 对象即可表示整个工作区中所有已提交目录及文件的内容，也就是说提交历史中的每一个提交都包含着一份完整的某一时刻的文件快照，并通过保存上一次提交的引用形成连续的文件快照历史。</p><h2 id=工作流程目录><a rel=noopener class="internal-link broken" data-src=#%e7%9b%ae%e5%bd%95>工作流程</a></h2><p><img src=https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/terminal/git-three-trees.png width=auto alt></p><ol><li><p>假设我们进入到一个新目录，其中有一个 README 文件。此时暂存区为空，提交历史为空，HEAD 引用指向未创建的 master 分支。</p></li><li><p>现在我们想提交该文件，首先需要通过 <code>git add</code> 将其添加到暂存区。此时 Git 将在 .git/objects 目录中以该文件的内容生成一个 blob 对象，并将 blob 对象的信息添加到 .git/index 文件中。</p></li><li><p>接着运行 <code>git commit</code> ，它会取得暂存区中的内容生成一个 tree 对象，该 tree 对象即为工作区文件的永久快照，然后创建一个指向该 tree 对象的提交对象，最后更新 master 指向本次提交。</p></li><li><p>假如我们在工作区编辑了文件，Git 会将其与暂存区现有文件快照进行比较，在 <code>git add</code> 了更改的文件后，根据文件当前内容生成新的 blob 对象并更新 .git/index 文件中的引用 ID。git commit 的过程与之前类似，但是新的提交对象会以 HEAD 引用指向的提交作为父提交，然后更新其引用的 master 指向新创建的提交。</p></li><li><p>当我们 <code>git checkout</code> 一个分支或提交时，它会修改 HEAD 指向新的分支引用或提交，将暂存区填充为该次提交的文件快照，然后将暂存区的内容解包复制到工作区中。</p></li></ol><h2 id=git-基本操作目录><a rel=noopener class="internal-link broken" data-src=#%e7%9b%ae%e5%bd%95>Git 基本操作</a></h2><a href=#配置命令><h3 id=配置命令><span class=hanchor arialabel=Anchor># </span>配置命令</h3></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 列出当前配置</span>
+</span></span><span class=line><span class=cl>git config --list
+</span></span><span class=line><span class=cl><span class=c1># 列出本地 Repository 配置</span>
+</span></span><span class=line><span class=cl>git config --local --list
+</span></span><span class=line><span class=cl><span class=c1># 列出全局配置</span>
+</span></span><span class=line><span class=cl>git config --global --list
+</span></span><span class=line><span class=cl><span class=c1># 列出系统配置</span>
+</span></span><span class=line><span class=cl>git config --system --list
+</span></span></code></pre></td></tr></table></div></div><a href=#把-git-的默认分支-master-修改成-main><h3 id=把-git-的默认分支-master-修改成-main><span class=hanchor arialabel=Anchor># </span>把 Git 的默认分支 master 修改成 main</h3></a><a href=#把默认分支改为-main><h4 id=把默认分支改为-main><span class=hanchor arialabel=Anchor># </span>把默认分支改为 main</h4></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git config --global init.defaultBranch main
+</span></span></code></pre></td></tr></table></div></div><a href=#修改已创建项目的主分支为-main><h4 id=修改已创建项目的主分支为-main><span class=hanchor arialabel=Anchor># </span>修改已创建项目的主分支为 main</h4></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 把当前master分支改名为main, 其中-M的意思是移动或者重命名当前分支</span>
+</span></span><span class=line><span class=cl>git branch -M main
+</span></span></code></pre></td></tr></table></div></div><a href=#初始化仓库及操作><h3 id=初始化仓库及操作><span class=hanchor arialabel=Anchor># </span>初始化仓库及操作</h3></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 初始化一个仓库</span>
+</span></span><span class=line><span class=cl>git init
+</span></span><span class=line><span class=cl><span class=c1># 添加文件到暂存区，后面可以跟多个文件，以空格区分</span>
+</span></span><span class=line><span class=cl>git add <span class=o>[</span>文件名<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=c1># 添加当前更改的所有文件到暂存区</span>
+</span></span><span class=line><span class=cl>git add .
+</span></span><span class=line><span class=cl><span class=c1># 提交暂存的更改，会新开编辑器进行编辑</span>
+</span></span><span class=line><span class=cl>git commit
+</span></span><span class=line><span class=cl><span class=c1># 提交暂存的更改，并记录下备注</span>
+</span></span><span class=line><span class=cl>git commit -m <span class=o>[</span>关于本次提交的相关说明<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=c1># 等同于 git add . &amp;&amp; git commit -m</span>
+</span></span><span class=line><span class=cl>git commit -am <span class=o>[</span>关于本次提交的相关说明<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=c1># 查看文件状态</span>
+</span></span><span class=line><span class=cl>git status
+</span></span><span class=line><span class=cl><span class=c1># 如果文件改变，比较工作区两个文件内容</span>
+</span></span><span class=line><span class=cl>git diff
+</span></span><span class=line><span class=cl><span class=c1># 比较 stage 的文件的差异，此时文件已经添加到 stage 了</span>
+</span></span><span class=line><span class=cl>git diff --staged
+</span></span><span class=line><span class=cl><span class=c1># 显示所有提交过的版本信息，不包括已经被删除的 commit 记录和 reset 的操作</span>
+</span></span><span class=line><span class=cl>git log
+</span></span><span class=line><span class=cl><span class=c1># 显示所有的操作记录，包括提交，回退的操作。一般用来找出操作记录中的版本号，进行回退</span>
+</span></span><span class=line><span class=cl>git reflog
+</span></span><span class=line><span class=cl><span class=c1># 软重置，只会删除基于当前 commit id 之后的 commit 信息，但相应的文件修改并没有重置</span>
+</span></span><span class=line><span class=cl>git reset <span class=o>[</span>commit id<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=c1># 回到 commit id 对应的版本</span>
+</span></span><span class=line><span class=cl>git reset --hard <span class=o>[</span>commit id<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=c1># 返回到前 N 个版本</span>
+</span></span><span class=line><span class=cl>git reset --hard head~<span class=o>[</span>N<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=c1># 返回到上一个 commit</span>
+</span></span><span class=line><span class=cl>git reset --hard head^
+</span></span><span class=line><span class=cl><span class=c1># 把本地仓库和远程仓库关联</span>
+</span></span><span class=line><span class=cl>git remote add <span class=o>[</span>远程仓库名<span class=o>]</span> <span class=o>[</span>远程仓库地址<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=c1># 删除远程仓库</span>
+</span></span><span class=line><span class=cl>git remote rm <span class=o>[</span>远程仓库名<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=c1># 查看远程仓储名称</span>
+</span></span><span class=line><span class=cl>git remote -v
+</span></span><span class=line><span class=cl><span class=c1># 从远程仓库拉取代码并合并到本地，可简写为 git pull 等同于 git fetch &amp;&amp; git merge</span>
+</span></span><span class=line><span class=cl>git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;
+</span></span><span class=line><span class=cl><span class=c1># 获取远程仓库特定分支的本地备份更新</span>
+</span></span><span class=line><span class=cl>git fetch &lt;远程主机名&gt; &lt;分支名&gt;
+</span></span><span class=line><span class=cl><span class=c1># 当你想将某个远程分支的内容取回到本地下某个分支的话</span>
+</span></span><span class=line><span class=cl>git fetch origin &lt;branch-name&gt;:&lt;local-branch-name&gt;
+</span></span><span class=line><span class=cl><span class=c1># 获取远程仓库所有分支的更新</span>
+</span></span><span class=line><span class=cl>git fetch --all
+</span></span><span class=line><span class=cl><span class=c1># 查看本地分支</span>
+</span></span><span class=line><span class=cl>git branch
+</span></span><span class=line><span class=cl><span class=c1># 查看远程分支</span>
+</span></span><span class=line><span class=cl>git branch -r
+</span></span><span class=line><span class=cl><span class=c1># 查看本地和远程分支</span>
+</span></span><span class=line><span class=cl>git branch -a
+</span></span><span class=line><span class=cl><span class=c1># 创建并切换到新建分支</span>
+</span></span><span class=line><span class=cl>git checkout -b &lt;branch-name&gt;
+</span></span><span class=line><span class=cl><span class=c1># 创建并切换到指定分支（ -C 大小写皆可）</span>
+</span></span><span class=line><span class=cl>git switch -C &lt;new-branch&gt;
+</span></span><span class=line><span class=cl><span class=c1># 从当前分支，切换到其他分支</span>
+</span></span><span class=line><span class=cl>git switch &lt;branch-name&gt;
+</span></span><span class=line><span class=cl><span class=c1># 与 switch 命令相同</span>
+</span></span><span class=line><span class=cl>git checkout &lt;branch-name&gt;
+</span></span><span class=line><span class=cl><span class=c1># 删除分支</span>
+</span></span><span class=line><span class=cl>git branch -d &lt;branch-name&gt;
+</span></span><span class=line><span class=cl><span class=c1># 删除远程分支</span>
+</span></span><span class=line><span class=cl>git push origin -d &lt;branch-name&gt;
+</span></span><span class=line><span class=cl><span class=c1># 当前分支与指定分支合并</span>
+</span></span><span class=line><span class=cl>git merge &lt;branch-name&gt;
+</span></span><span class=line><span class=cl><span class=c1># 查看哪些分支已经合并到当前分支</span>
+</span></span><span class=line><span class=cl>git branch --merged
+</span></span><span class=line><span class=cl><span class=c1># 重命名分支</span>
+</span></span><span class=line><span class=cl>git branch -m &lt;old-branch-name&gt; &lt;new-branch-name&gt;
+</span></span><span class=line><span class=cl><span class=c1># 如果当前分支与多个主机存在追踪关系，那么这个时候 -u 选项会指定一个默认主机，这样后面就可以不加任何参数使用 git push</span>
+</span></span><span class=line><span class=cl>git push -u origin main
+</span></span><span class=line><span class=cl><span class=c1># 如果当前分支只有一个追踪分支，那么主机名都可以省略</span>
+</span></span><span class=line><span class=cl>git push
+</span></span><span class=line><span class=cl><span class=c1># 将当前分支推送到 origin 主机的对应分支，如果上游没有就会新建分支</span>
+</span></span><span class=line><span class=cl>git push origin develop
+</span></span><span class=line><span class=cl><span class=c1># 删除远程分支</span>
+</span></span><span class=line><span class=cl>git push origin -d &lt;branch-name&gt;
+</span></span><span class=line><span class=cl><span class=c1># 结果类似于 git reset --hard &lt;commit-id&gt; 但是它不会重置提交历史，而是对此操作重新 commit 一个消息，对 revert 对应的 commit-id 重新 revert 会回到没有 revert 的状态</span>
+</span></span><span class=line><span class=cl>git revert &lt;commit-id&gt;
+</span></span></code></pre></td></tr></table></div></div><a href=#git-status><h3 id=git-status><span class=hanchor arialabel=Anchor># </span>git status</h3></a><p>通常我们需要查看一个文件的状态</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git status
+</span></span></code></pre></td></tr></table></div></div><ul><li><p><code>Changes not staged for commit</code></p><p>表示得大概就是工作区有该内容，但是缓存区没有，需要我们 git add</p></li><li><p><code>Changes to be committed</code></p><p>一般而言，这个时候，文件放在缓存区了，我们需要 git commit</p></li><li><p><code>nothing to commit, working tree clean</code></p><p>这个时候，我们将本地的代码推送到远端即可</p></li></ul><a href=#修改提交信息><h3 id=修改提交信息><span class=hanchor arialabel=Anchor># </span>修改提交信息</h3></a><p>有时候我们提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了。 此时，可以运行带有 &ndash;amend 选项的提交命令来重新提交：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git commit --amend
+</span></span></code></pre></td></tr></table></div></div><p>这个命令会将暂存区中的文件提交。如果自上次提交以来你还未做任何修改（<strong>例如，在上次提交后马上执行了此命令</strong>）， 那么快照会保持不变，而你所修改的只是提交信息。</p><p>文本编辑器启动后，可以看到之前的提交信息。 编辑后保存会覆盖原来的提交信息。</p><p>例如，你提交后发现忘记了暂存某些需要的修改，可以像下面这样操作：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git commit -m <span class=s1>&#39;initial commit&#39;</span>
+</span></span><span class=line><span class=cl>git add forgotten_file
+</span></span><span class=line><span class=cl>git commit --amend
+</span></span></code></pre></td></tr></table></div></div><p>最终你只会有一个提交——第二次提交将代替第一次提交的结果。</p><a href=#撤销修改><h3 id=撤销修改><span class=hanchor arialabel=Anchor># </span>撤销修改</h3></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git checkout -- <span class=o>[</span>文件名<span class=o>]</span>
+</span></span></code></pre></td></tr></table></div></div><p>说明: 把文件在<strong>工作区</strong>的修改全部撤销，这里有两种情况：</p><ul><li>一种是文件自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；</li><li>一种是文件已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+总之，就是撤销当前<strong>工作区</strong>的修改</li></ul><blockquote><p>不带路径的 <code>git checkout [commit or branch]</code> 用于「检出」某个提交或分支，检出可以理解为「拿出来查看」。</p><p><strong>若工作区与暂存区存在未提交的本地更改，checkout 还会尝试将文件快照与本地更改做简单的合并，若合并失败，将会中止操作并恢复到 checkout 之前的状态。</strong> 因此 checkout 对工作区是安全的，它不会丢弃工作区所做的更改。</p></blockquote><a href=#git-pull><h3 id=git-pull><span class=hanchor arialabel=Anchor># </span>git pull</h3></a><a href=#git-pull-命令的原理><h4 id=git-pull-命令的原理><span class=hanchor arialabel=Anchor># </span>git pull 命令的原理</h4></a><p><code>git fetch</code> 会查询 git remote 中所有的远程仓库所包含分支的最新提交，并将其记录到 <strong>.git/FETCH_HEAD</strong> 文件中。</p><p><strong>.git/FETCH_HEAD</strong> 是一个版本链接，指向着目前已经从远程仓库取下来的所有分支的最新提交。</p><p><code>git pull</code> 命令等价于：先执行 <code>git fetch</code>，再执行 <code>git merge FETCH_HEAD</code> 将远程仓库对应分支的最新提交合并到当前本地分支中。</p><a href=#git-pull-命令中各选项的含义><h4 id=git-pull-命令中各选项的含义><span class=hanchor arialabel=Anchor># </span>git pull 命令中各选项的含义</h4></a><p>其中 <code>git pull</code> 有这几项常见的选项搭配：</p><ul><li>不带任何选项的 <code>git pull</code> 命令：先尝试快进合并，如果不行再进行正常合并生成一个新的提交。</li><li><code>git pull --ff-only</code> 命令：只尝试快进合并，如果不行则终止当前合并操作。</li><li><code>git pull --no-ff</code> 命令：禁止快进合并，即不管能不能快进合并，最后都会进行正常合并生成一个新的提交。</li><li><code>git pull --rebase</code> 命令：先尝试快进合并，如果不行再进行变基合并。</li></ul><a href=#合并两个默认情况下没有共同基础的分支><h3 id=合并两个默认情况下没有共同基础的分支><span class=hanchor arialabel=Anchor># </span>合并两个默认情况下没有共同基础的分支</h3></a><blockquote><p><strong>I always see this error if when I create a new Github repository with a README.md, then pull it to a local repository at the first time.</strong></p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git pull origin &lt;branch-name&gt; --allow-unrelated-histories
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>&ldquo;git merge&rdquo; used to allow merging two branches that have no common base by default, which led to a brand new history of an existing project created and then get pulled by an unsuspecting maintainer, which allowed an unnecessary parallel history merged into the existing project. The command has been taught not to allow this by default, with an escape hatch &ndash;allow-unrelated-histories option to be used in a rare event that merges histories of two projects that started their lives independently.</p></blockquote><a href=#不建议在没有为偏离分支指定合并策略时执行-pull-操作><h3 id=不建议在没有为偏离分支指定合并策略时执行-pull-操作><span class=hanchor arialabel=Anchor># </span>不建议在没有为偏离分支指定合并策略时执行 pull 操作</h3></a><p>当使用 Git 版本为 2.27.0 以上时，使用 <code>git pull</code> 命令出现以下的警告：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>warning: Pulling without specifying how to reconcile divergent branches is
+</span></span><span class=line><span class=cl>discouraged. You can squelch this message by running one of the following
+</span></span><span class=line><span class=cl>commands sometime before your next pull:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  git config pull.rebase <span class=nb>false</span>  <span class=c1># merge (the default strategy)</span>
+</span></span><span class=line><span class=cl>  git config pull.rebase <span class=nb>true</span>   <span class=c1># rebase</span>
+</span></span><span class=line><span class=cl>  git config pull.ff only       <span class=c1># fast-forward only</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>You can replace <span class=s2>&#34;git config&#34;</span> with <span class=s2>&#34;git config --global&#34;</span> to <span class=nb>set</span> a default
+</span></span><span class=line><span class=cl>preference <span class=k>for</span> all repositories. You can also pass --rebase, --no-rebase,
+</span></span><span class=line><span class=cl>or --ff-only on the <span class=nb>command</span> line to override the configured default per
+</span></span><span class=line><span class=cl>invocation.
+</span></span></code></pre></td></tr></table></div></div><p>该警告的中文版本文案描述如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>warning: 不建议在没有为偏离分支指定合并策略时执行pull操作。
+</span></span><span class=line><span class=cl>您可以在执行下一次pull操作之前执行下面一条命令来抑制本消息：
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>git config pull.rebase <span class=nb>false</span>  <span class=c1># 合并（默认缺省策略）</span>
+</span></span><span class=line><span class=cl>git config pull.rebase <span class=nb>true</span>   <span class=c1># 变基</span>
+</span></span><span class=line><span class=cl>git config pull.ff only       <span class=c1># 仅快进</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>您可以将 <span class=s2>&#34;git config&#34;</span> 替换为 <span class=s2>&#34;git config --global&#34;</span> 以便为所有仓库设置
+</span></span><span class=line><span class=cl>缺省的配置项。您也可以在每次执行 pull 命令时添加 --rebase、--no-rebase，
+</span></span><span class=line><span class=cl>或者 --ff-only 参数覆盖缺省设置。
+</span></span></code></pre></td></tr></table></div></div><p><strong>首先理解什么是偏离分支</strong>：</p><p>当本地的分支落后于远程分支时，本地分支又自行修改项目文件生成了新的提交，这时本地分支再执行 <code>git pull</code> 命令就不能快进合并，并且还容易发生冲突。这时的本地分支便称为偏离分支，因为这时的本地分支的最新提交跟远程分支的最新提交不同，产生了偏离。</p><p><strong>接着理解什么是合并策略</strong>：</p><p>合并策略便是 <code>git merge --ff-only</code>、<code>git merge --no-ff</code>、<code>git merge --rebase</code> 这三种常见的合并策略，分别代表着快进合并、非快进普通合并、变基合并。</p><p>而我们执行不带任何选项的 <code>git pull</code> 命令时，Git 就不知道我们到底想用哪种合并策略来执行 <code>git pull</code>，因此 Git 会给出上述的警告文案，建议我们通过<code>git config</code> 命令应该按照这三种合并策略的哪种来执行。</p><p><strong>解决问题</strong>：</p><ul><li>保持当前的默认合并策略：<code>git config pull.rebase false</code>，
+因为 <code>pull.ff</code> 默认是没有指定的，而没有指定的 <code>pull.ff</code> 的默认值与显式指定为 <code>false</code> 的效果一致。</li><li><code>git pull</code> 时只接受快进合并和变基合并：<code>git config pull.ff only</code>，保证每次执行不带选项的 <code>git pull</code> 时要么快进合并成功，要么快进合并失败。如果快进合并失败，再显式执行 <code>git pull --rebase</code> 进行变基合并即可。</li></ul><a href=#git-switch><h3 id=git-switch><span class=hanchor arialabel=Anchor># </span>git switch</h3></a><p><code>git switch</code> 命令专门用于切换分支，可以用来替代 <code>checkout</code> 的部分用途。</p><p><strong>创建并切换到指定分支（ -C 大小写皆可）</strong>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git switch -C &lt;new-branch&gt;
+</span></span></code></pre></td></tr></table></div></div><p>切换到已有分支：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git switch &lt;branch&gt;
+</span></span></code></pre></td></tr></table></div></div><p>和 <code>checkout</code> 一样，<code>switch</code> 对工作区是安全的，它会尝试合并工作区和暂存区中的本地更改，如果无法完成合并则会中止操作，本地更改会被保留。</p><p><code>switch</code> 的使用方式简单且专一，它无法像 <code>checkout</code> 一样对指定提交使用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git switch ea4c48a
+</span></span></code></pre></td></tr></table></div></div><p>fatal: 期望一个分支，得到提交 &rsquo;ea4c48a'</p><a href=#git-reset><h3 id=git-reset><span class=hanchor arialabel=Anchor># </span>git reset</h3></a><p><code>git reset</code> 的主要作用是将 HEAD 重置为指定的提交，有 -—soft、&ndash;mixed、&ndash;hard 三种主要的命令选项。</p><ul><li><p><code>--soft</code> 只会对提交历史进行重置，不会再对暂存区以及工作区进行任何更改。</p></li><li><p><code>--mixed</code> 选项是 <code>git reset</code> 它除了重置提交历史，还会更新暂存区，例如暂存区有未提交的文件，工作区又对文件做了修改，他会直接把暂存区的修改丢掉。</p></li><li><p><code>--hard</code> 是 reset 最直接、最危险以及最常用的选项。它除了重置提交历史，工作区和暂存区中所有未提交的更改都会永久丢失，但被重置的提交仍有办法找回。</p></li></ul><p>另一个关于 reset 的实践是，不要在公共分支上执行 reset。公共分支是指你与其他团队成员协作开发的分支。如果你需要修复一个公共提交引入的问题，请使用专门为此目的设计的 <code>git revert</code>。</p><a href=#git-restore><h3 id=git-restore><span class=hanchor arialabel=Anchor># </span>git restore</h3></a><p><code>restore</code> 命令用于还原工作区或暂存区中的指定文件或文件集合：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 撤销工作区的修改</span>
+</span></span><span class=line><span class=cl>git restore <span class=o>[</span>文件名<span class=o>]</span> <span class=c1>#同 git checkout -- [文件名] 同价</span>
+</span></span><span class=line><span class=cl><span class=c1># 撤销暂存区的修改</span>
+</span></span><span class=line><span class=cl>git restore <span class=o>[</span>文件名<span class=o>]</span> --staged
+</span></span></code></pre></td></tr></table></div></div><a href=#git-stage><h3 id=git-stage><span class=hanchor arialabel=Anchor># </span>git stage</h3></a><p>添加文件到暂存区</p><blockquote><p>git 的 add，是一个容易引起疑问的命令。同时，<code>git diff --cached</code> 是比较 stage 的文件的差异的，也是一个不直观的命令。</p></blockquote><p>github 2008 年的 blog 中，也提到，容易引起混淆：</p><blockquote><p>things like making use of the term ‘stage’ for things that happen in the index (such as using ‘git diff —staged’ instead of ‘git diff —cached’) is being worked on. I’m excited that staging files may soon be done via ‘git stage’ rather-than/in-addition-to ‘git add’. This is nice for new users who often have a hard time seeing why you have to keep ‘git add’ing to stage your changes.</p></blockquote><p>事实上，在 git 的后续版本中，就做了两个修改：</p><p><code>git stage</code> 作为 <code>git add</code> 的一个同义词</p><p><code>git diff --staged</code> 作为 <code>git diff --cached</code> 的相同命令</p><p>为了容易理解，推荐大家使用 <code>git stage</code> 和 <code>git diff --staged</code> 这两个命令，而 <code>git add</code> 和 <code>git diff --cached</code> 这两个命令，仅仅为了保持和以前的兼容做保留。</p><a href=#git-rebase><h3 id=git-rebase><span class=hanchor arialabel=Anchor># </span>git rebase</h3></a><a href=#git-rebase-作用于分支合并><h4 id=git-rebase-作用于分支合并><span class=hanchor arialabel=Anchor># </span>git rebase 作用于分支合并</h4></a><blockquote><p>rebase 翻译为变基，他的作用和 merge 很相似，用于把一个分支的修改合并到当前分支上。</p></blockquote><p><img src=https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/terminal/b169721a6bfc42a7b4754f7c5d65672d_tplv-k3u1fbpfcp-zoom-in-crop-mark_1304_0_0_0.webp width=auto alt></p><a href=#git-rebase-交互模式><h4 id=git-rebase-交互模式><span class=hanchor arialabel=Anchor># </span>git rebase 交互模式</h4></a><p>在开发中，常会遇到在一个分支上产生了很多的无效的提交，这种情况下使用 rebase 的交互式模式可以把已经发生的多次提交压缩成一次提交，得到了一个干净的提交历史，例如某个分支的提交历史情况如下：</p><p><img src=https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/terminal/SCR-20220403-147.png width=auto alt></p><p>进入交互式模式的方式是执行：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git rebase -i &lt;base-commit&gt;
+</span></span></code></pre></td></tr></table></div></div><p>参数 <code>base-commit</code> 就是指明操作的基点提交对象，基于这个基点进行 <code>rebase</code> 的操作，对于上述提交历史的例子，我们要把最后的一个提交对象（ 8061e866 ）之前的提交压缩成一次提交，我们需要执行的命令格式是：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git rebase -i 8061e866
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>TIPS：有时候 <code>git rebase -i --root</code> 会很有用</p></blockquote><p>此时会进入一个 vim 的交互式页面，编辑器列出的信息像下列这样。</p><p><img src=https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/terminal/SCR-20220403-1c4.png width=auto alt></p><p>想要合并这一堆更改，我们要使用 Squash 策略进行合并，即把当前的 commit 和它的上一个 commit 内容进行合并， 大概可以表示为下面这样，在交互模式的 rebase 下，至少保留一个 pick，否则命令会执行失败。</p><p>修改文件后 按下 : 然后 wq 保存退出，此时又会弹出一个编辑页面，这个页面是用来编辑提交的信息，修改为 feat: 变基，最后保存一下</p><p><img src=https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/terminal/SCR-20220403-1be.png width=auto alt></p><blockquote><p>特别注意，只能在自己使用的 feature 分支上进行 rebase 操作，不允许在集成分支上进行 rebase，因为这种操作会修改集成分支的历史记录。</p></blockquote><a href=#git-merge-和-git-rebase-的区别><h4 id=git-merge-和-git-rebase-的区别><span class=hanchor arialabel=Anchor># </span>git merge 和 git rebase 的区别</h4></a><p>不同于 <code>git rebase</code> 的是，<code>git merge</code> 在不是 fast-forward（快速合并）的情况下，会产生一条额外的合并记录，类似 <code>Merge branch 'xxx' into 'xxx'</code> 的一条提交信息。</p><p>另外，在解决冲突的时候，用 merge 只需要解决一次冲突即可，简单粗暴，而用 rebase 的时候 ，需要依次解决每次的冲突，才可以提交。</p><a href=#解决-git-rebase-操作后推送远端分支不成功的问题><h4 id=解决-git-rebase-操作后推送远端分支不成功的问题><span class=hanchor arialabel=Anchor># </span>解决 git rebase 操作后推送远端分支不成功的问题</h4></a><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git push -f
+</span></span></code></pre></td></tr></table></div></div><a href=#git-cherry-pick><h3 id=git-cherry-pick><span class=hanchor arialabel=Anchor># </span>git cherry-pick</h3></a><p><code>git cherry-pick</code> 可以理解为”挑拣”提交，和 merge 合并一个分支的所有提交不同的是，它会获取某一个分支的单笔提交，并作为一个新的提交引入到你当前分支上。当我们需要在本地合入其他分支的提交时，如果我们不想对整个分支进行合并，而是只想将某一次提交合入到本地当前分支上，那么就要使用 <code>git cherry-pick</code> 了。</p><p>一次转移多个提交：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git cherry-pick commit1 commit2
+</span></span></code></pre></td></tr></table></div></div><p>上面的命令将 commit1 和 commit2 两个提交应用到当前分支。</p><p>多个连续的 commit，也可区间复制：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git cherry-pick commit1^..commit2
+</span></span></code></pre></td></tr></table></div></div><p>上面的命令将 commit1 到 commit2 这个区间的 commit 都应用到当前分支（包含commit1、commit2），commit1 是最早的提交。</p><a href=#git-stash><h3 id=git-stash><span class=hanchor arialabel=Anchor># </span>git stash</h3></a><p>会有这么一个场景，现在你正在用你的 feature 分支上开发新功能。这时，生产环境上出现了一个 bug 需要紧急修复，但是你这部分代码还没开发完，不想提交，怎么办？这个时候可以用 <code>git stash</code> 命令先把工作区已经修改的文件暂存起来，然后切换到 hotfix 分支上进行 bug 的修复，修复完成后，切换回 feature 分支，从堆栈中恢复刚刚保存的内容。</p><p>基本命令如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git stash <span class=c1>#把本地的改动暂存起来</span>
+</span></span><span class=line><span class=cl>git stash save <span class=s2>&#34;message&#34;</span> <span class=c1># 执行存储时，添加备注，方便查找。</span>
+</span></span><span class=line><span class=cl>git stash pop <span class=c1># 应用最近一次暂存的修改，并删除暂存的记录</span>
+</span></span><span class=line><span class=cl>git stash apply  <span class=c1># 应用某个存储,但不会把存储从存储列表中删除，默认使用第一个存储,即 stash@{0}，如果要使用其他个，git stash apply stash@{$num}</span>
+</span></span><span class=line><span class=cl>git stash list <span class=c1># 查看 stash 有哪些存储</span>
+</span></span><span class=line><span class=cl>git stash clear <span class=c1># 删除所有缓存的 stash</span>
+</span></span></code></pre></td></tr></table></div></div><p>例如，我正在开发一个新功能，修改了 1.js 文件里的内容，</p><p>还没开发完成，这个时候，我想切换到 hotfix 分支上修复 bug，得暂停下开发切换到 hotfix 分支，但是现在工作区还有内容，此时如果切换分支 Git 会报出下面的错误</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>error: Your <span class=nb>local</span> changes to the following files would be overwritten by checkout:
+</span></span><span class=line><span class=cl>        1.js
+</span></span><span class=line><span class=cl>Please commit your changes or stash them before you switch branches.
+</span></span><span class=line><span class=cl>Aborting
+</span></span></code></pre></td></tr></table></div></div><p><img src=https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/terminal/SCR-20220403-74s.png width=auto alt></p><p>上面那句话的意思就是说工作区有文件修改，不能提交，需要先进行 commit 或者 stash 操作，执行 git stash，结果如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>Saved working directory and index state WIP on stash: 22e561c feat: add 1.js
+</span></span></code></pre></td></tr></table></div></div><p><img src=https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/terminal/SCR-20220403-76d.png width=auto alt></p><p>此时，我们的工作区已经干净了，可以切换到 hotfix 分支进行 bug 修复的工作，假设我们现在 bug 修复完成了，继续切回 feature 分支进行原本功能的开发，此时只需要执行 <code>git stash pop</code>，之前我们暂存的修改就会恢复到工作区，如下图所示</p><p><img src=https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/terminal/SCR-20220403-776.png width=auto alt></p><p>当我们想要暂存文件，切换分支做某些事的时候，可以用 <code>git stash</code> 这种机制帮助开发。</p><blockquote><p>推荐在使用 stash 的相关命令时，每一次暂存的时候，不要直接使用 <code>git stash</code> 命令进行暂存下来，而是使用 <code>git stash save "message..."</code> 这种方式，给本次的提交做一个信息的记录。这样，想应用更改的时候，先通过 <code>git stash list</code> 查看一下所有的暂存列表。之后，推荐使用 <code>git stash apply stash@${num}</code> 的方式进行应用对应的 stash，这样不会清空已有的 stash 的列表项，并且能应用到当前的工作区，不需要这个暂存的话，再手动清除就可以了。</p></blockquote><a href=#配置-git-alias-提升工作效率><h3 id=配置-git-alias-提升工作效率><span class=hanchor arialabel=Anchor># </span>配置 git alias 提升工作效率</h3></a><p>它的基本用法是 <code>git config --global alias.&lt;简化的字符> 原始命令</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>git config --global alias.co checkout
+</span></span><span class=line><span class=cl>git config --global alias.ci commit
+</span></span><span class=line><span class=cl>git config --global alias.br branch
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># git config --global --unset alias.ci 取消别名</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=https://raw.githubusercontent.com/chuenwei0129/my-picgo-repo/master/terminal/SCR-20220403-7do.png width=auto alt></p><p>这些命令其实是更新你全局的 <code>.gitconfig</code> 文件，该文件用来保存全局的 git 配置，你可以直接 <code>code ~/.gitconfig</code> 手动添加</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=o>[</span>alias<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=nv>st</span> <span class=o>=</span> status -sb
+</span></span><span class=line><span class=cl><span class=nv>co</span> <span class=o>=</span> checkout
+</span></span><span class=line><span class=cl><span class=nv>br</span> <span class=o>=</span> branch
+</span></span><span class=line><span class=cl><span class=nv>mg</span> <span class=o>=</span> merge
+</span></span><span class=line><span class=cl><span class=nv>cm</span> <span class=o>=</span> commit -m
+</span></span><span class=line><span class=cl><span class=nv>ds</span> <span class=o>=</span> diff --staged
+</span></span><span class=line><span class=cl><span class=nv>dt</span> <span class=o>=</span> difftool
+</span></span><span class=line><span class=cl><span class=nv>mt</span> <span class=o>=</span> mergetool
+</span></span><span class=line><span class=cl><span class=nv>last</span> <span class=o>=</span> log -1 HEAD
+</span></span><span class=line><span class=cl><span class=nv>latest</span> <span class=o>=</span> <span class=k>for</span>-each-ref --sort<span class=o>=</span>-committerdate --format<span class=o>=</span><span class=se>\&#34;</span>%<span class=o>(</span>committername<span class=o>)</span>@%<span class=o>(</span>refname:short<span class=o>)</span> <span class=o>[</span>%<span class=o>(</span>committerdate:short<span class=o>)]</span> %<span class=o>(</span>contents<span class=o>)</span><span class=se>\&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>ls</span> <span class=o>=</span> log --pretty<span class=o>=</span>format:<span class=se>\&#34;</span>%C<span class=o>(</span>yellow<span class=o>)</span>%h %C<span class=o>(</span>blue<span class=o>)</span>%ad %C<span class=o>(</span>red<span class=o>)</span>%d %C<span class=o>(</span>reset<span class=o>)</span>%s %C<span class=o>(</span>green<span class=o>)[</span>%cn<span class=o>]</span><span class=se>\&#34;</span> --decorate --date<span class=o>=</span>short
+</span></span><span class=line><span class=cl><span class=nv>hist</span> <span class=o>=</span> log --pretty<span class=o>=</span>format:<span class=se>\&#34;</span>%C<span class=o>(</span>yellow<span class=o>)</span>%h %C<span class=o>(</span>red<span class=o>)</span>%d %C<span class=o>(</span>reset<span class=o>)</span>%s %C<span class=o>(</span>green<span class=o>)[</span>%an<span class=o>]</span> %C<span class=o>(</span>blue<span class=o>)</span>%ad<span class=se>\&#34;</span> --topo-order --graph --date<span class=o>=</span>short
+</span></span><span class=line><span class=cl><span class=nb>type</span> <span class=o>=</span> cat-file -t
+</span></span><span class=line><span class=cl><span class=nv>dump</span> <span class=o>=</span> cat-file -p
+</span></span><span class=line><span class=cl><span class=nv>lg</span> <span class=o>=</span> log --color --graph --pretty<span class=o>=</span>format:<span class=s1>&#39;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset&#39;</span> --abbrev-commit
+</span></span></code></pre></td></tr></table></div></div><a href=#参考资料><h2 id=参考资料><span class=hanchor arialabel=Anchor># </span>参考资料</h2></a><ul><li><a href=https://www.waynerv.com/posts/git-undo-intro/ rel=noopener>git 工作原理与撤销操作图解</a></li><li><a href=https://www.zhihu.com/question/19946553 rel=noopener>为什么要先 git add 才能 git commit ？</a></li><li><a href=https://juejin.cn/post/6974184935804534815 rel=noopener>我在工作中是如何使用 Git 的</a></li><li><a href=https://zhuanlan.zhihu.com/p/101954895 rel=noopener>高频 Git 面试题</a></li><li><a href=https://stackoverflow.com/questions/37937984/git-refusing-to-merge-unrelated-histories-on-rebase rel=noopener>Git refusing to merge unrelated histories on rebase</a></li><li><a href=https://blog.csdn.net/wq6ylg08/article/details/114106272 rel=noopener>不建议在没有为偏离分支指定合并策略时执行pull 操作</a></li></ul></article><hr><div class=page-end id=footer><div class=backlinks-container><h3>Backlinks</h3><ul class=backlinks><li>No backlinks found</li></ul></div><div><script src=https://cdn.jsdelivr.net/npm/d3@6.7.0/dist/d3.min.js integrity="sha256-+7jaYCp29O1JusNWHaYtgUn6EhuP0VaFuswhNV06MyI=" crossorigin=anonymous></script><h3>Interactive Graph</h3><div id=graph-container></div><style>:root{--g-node:var(--secondary);--g-node-active:var(--primary);--g-node-inactive:var(--visited);--g-link:var(--outlinegray);--g-link-active:#5a7282}</style><script src=https://chuenwei0129.github.io/blog/js/graph.abd4bc2af3869a96524d7d23b76152c7.js></script></div></div><div id=contact_buttons><footer><p></p><ul><li><a href=https://chuenwei0129.github.io/blog/>Home</a></li><li><a href=https://twitter.com/chuenwei0129>Twitter</a></li><li><a href=https://github.com/chuenwei0129>Github</a></li></ul></footer></div></div></body></html>
