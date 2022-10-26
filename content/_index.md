@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: "测试文章标题"
 enableToc: false
 ---
 
@@ -8,6 +8,8 @@ enableToc: false
 对于所有的问题，我都希望得到一个很漂亮的回答, **一个让人一眼看过去就茅塞顿开的回答**。实际上这是很难的。就好比人们总是希望一句话就说清楚生活的意义是什么。实际上也是很难的。
 
 **怀揣着这种不确定感继续学习，不要有知识包袱，不要假装自己很聪明**。这个世界本身就是抽象又复杂的。这没什么大不了。
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=465262028&auto=1&height=66"></iframe>
 
 ## 文具永远不嫌多的差生
 
